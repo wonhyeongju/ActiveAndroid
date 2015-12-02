@@ -20,9 +20,11 @@ package com.activeandroid.util;
 import android.database.Cursor;
 
 import java.io.Closeable;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
-import com.activeandroid.util.Log;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 public class IOUtils {
@@ -66,6 +68,26 @@ public class IOUtils {
             cursor.close();
         } catch (final Exception e) {
             Log.e("Couldn't close cursor.", e);
+        }
+    }
+
+    public static String exportDatabase(String originPath) {
+        try {
+            String backupPath = originPath + ".backup";
+            final InputStream inputStream = new FileInputStream(originPath);
+            final OutputStream output = new FileOutputStream(backupPath);
+            byte[] buffer = new byte[8192];
+            int length;
+            while ((length = inputStream.read(buffer, 0, 8192)) > 0) {
+                output.write(buffer, 0, length);
+            }
+            output.flush();
+            output.close();
+            inputStream.close();
+            return backupPath;
+        } catch (IOException e) {
+            Log.e("Failed to open file", e);
+            return null;
         }
     }
 }
