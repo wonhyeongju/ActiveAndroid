@@ -122,6 +122,9 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 			// run insert or replace with transaction
 			db.beginTransaction();
 			for (String table : tables) {
+				if ("sqlite_sequence".equals(table)) {
+					continue;
+				}
 				String sql = "create table if not exists " + table + " as select * from old." + table;
 				db.execSQL(sql);
 			}
