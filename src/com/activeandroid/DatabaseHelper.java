@@ -129,10 +129,10 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 				db.execSQL(sql);
 			}
 			db.setTransactionSuccessful();
+			db.endTransaction();
+			db.close();
 		} catch (Exception e) {
 			Log.e("Failed to attach db", e);
-		} finally {
-			db.endTransaction();
 		}
 	}
 
